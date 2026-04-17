@@ -113,6 +113,64 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
 /* ── Status ── */
 #send-status{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;min-height:18px;}
 
+/* ── Nav tabs ── */
+.nav-tabs{display:flex;background:var(--primary);border-top:1px solid rgba(255,255,255,0.1);}
+.nav-tab{flex:1;padding:11px 8px;border:none;border-bottom:3px solid transparent;background:transparent;color:rgba(255,255,255,0.5);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
+.nav-tab.active{color:white;border-bottom-color:var(--accent);}
+.nav-tab:hover:not(.active){color:rgba(255,255,255,0.8);}
+.page{display:none;}.page.active{display:block;}
+
+/* ── Dashboard login overlay ── */
+#dash-lock{position:absolute;inset:0;background:rgba(247,244,239,0.97);display:flex;align-items:center;justify-content:center;z-index:200;min-height:300px;}
+#dash-lock-box{background:white;border-radius:12px;padding:28px 24px;width:100%;max-width:320px;text-align:center;border:1px solid var(--border);}
+#dash-lock-box h3{font-size:16px;font-weight:600;color:var(--primary);margin-bottom:4px;}
+#dash-lock-box p{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.dfield{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;text-align:left;}
+.dfield label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:500;}
+.dfield input{border:1.5px solid var(--border);border-radius:7px;padding:10px 12px;font-size:14px;outline:none;width:100%;}
+.dfield input:focus{border-color:var(--accent2);}
+#btn-dash-login{background:var(--primary);color:white;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;width:100%;}
+#dash-lock-error{color:var(--red);font-size:12px;margin-top:8px;min-height:16px;}
+
+/* ── Dashboard layout ── */
+#dash-page{position:relative;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px;margin-bottom:18px;}
+.kpi{background:var(--card);border-radius:10px;padding:12px 10px;text-align:center;border:1px solid var(--border);}
+.kpi-val{font-size:26px;font-weight:700;color:var(--primary);line-height:1;}
+.kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:3px;}
+.kpi.green .kpi-val{color:var(--green);}
+.kpi.yellow .kpi-val{color:var(--yellow);}
+.kpi.red .kpi-val{color:var(--red);}
+.kpi.blue .kpi-val{color:var(--accent2);}
+.dash-section{margin-bottom:18px;}
+.dash-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--primary);margin-bottom:8px;padding-left:2px;}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+@media(max-width:560px){.chart-grid{grid-template-columns:1fr;}}
+.chart-card{background:var(--card);border-radius:10px;padding:14px;border:1px solid var(--border);}
+.chart-card h3{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.chart-card.full{grid-column:1/-1;}
+.chart-wrap{position:relative;height:190px;}
+.chart-card.full .chart-wrap{height:200px;}
+.domain-table{width:100%;border-collapse:collapse;font-size:13px;}
+.domain-table th{text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:2px solid var(--border);}
+.domain-table td{padding:8px 10px;border-bottom:1px solid var(--border);}
+.domain-table tr:last-child td{border-bottom:none;}
+.bar-cell{display:flex;align-items:center;gap:7px;}
+.mini-bar{height:7px;border-radius:99px;min-width:3px;}
+.records-table{width:100%;border-collapse:collapse;font-size:13px;}
+.records-table th{text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;}
+.records-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.records-table tr:last-child td{border-bottom:none;}
+.rbadge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;}
+.rbadge.robusto{background:#e8f5ee;color:var(--green);}
+.rbadge.risco{background:#fdf5e0;color:#856404;}
+.rbadge.fragil{background:#fbeaea;color:var(--red);}
+.filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.filter-select{border:1.5px solid var(--border);border-radius:7px;padding:7px 10px;font-size:13px;color:var(--text);background:var(--bg);outline:none;cursor:pointer;}
+#dash-loading{text-align:center;padding:40px 20px;color:var(--muted);}
+#dash-error{display:none;background:#fbeaea;border:1px solid var(--red);border-radius:8px;padding:14px;margin-bottom:14px;font-size:13px;color:var(--red);}
+#dash-content{display:none;}
+
 /* ── Toast ── */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--primary);color:white;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -160,6 +218,15 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
   <small>Versão do Profissional de Saúde</small>
 </header>
 
+<!-- Nav tabs -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showTab('form-page',this)">📋 Formulário</button>
+  <button class="nav-tab" onclick="showTab('dash-page',this)">📊 Dashboard</button>
+</div>
+
+<!-- FORM PAGE -->
+<div id="form-page" class="page active">
+
 <!-- Setup banner (shown when URL not configured) -->
 <div id="setup-banner">
   <strong>⚙️ Configure o banco de dados (apenas uma vez)</strong>
@@ -184,6 +251,10 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
       <div class="field full">
         <label for="p-name">Nome completo do paciente</label>
         <input id="p-name" type="text" placeholder="Digite o nome completo..." autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="p-nasc">Data de nascimento</label>
+        <input id="p-nasc" type="date">
       </div>
       <div class="field">
         <label>Gênero</label>
@@ -496,6 +567,94 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
 
 <div id="toast"></div>
 
+</div><!-- /form-page -->
+
+<!-- DASHBOARD PAGE -->
+<div id="dash-page" class="page" style="position:relative;">
+
+  <!-- Dashboard login lock -->
+  <div id="dash-lock">
+    <div id="dash-lock-box">
+      <h3>🔒 Acesso Restrito</h3>
+      <p>Dashboard disponível apenas para administradores</p>
+      <div class="dfield">
+        <label for="dash-pass">Senha do dashboard</label>
+        <input id="dash-pass" type="password" placeholder="Digite a senha..." onkeydown="if(event.key==='Enter')dashLogin()">
+      </div>
+      <button id="btn-dash-login" onclick="dashLogin()">Entrar</button>
+      <div id="dash-lock-error"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header dashboard -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:16px;font-weight:600;color:var(--primary);">📊 Dashboard de Avaliações</div>
+      <button onclick="loadDashData()" style="border:1.5px solid var(--border);background:transparent;border-radius:7px;padding:7px 14px;font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;">🔄 Atualizar</button>
+    </div>
+
+    <div id="dash-error"></div>
+    <div id="dash-loading">⏳ Carregando dados da planilha...</div>
+
+    <div id="dash-content">
+
+      <!-- KPIs -->
+      <div class="dash-section">
+        <div class="dash-section-title">📈 Visão Geral</div>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kpi-val" id="kpi-total">—</div><div class="kpi-label">Total</div></div>
+          <div class="kpi"><div class="kpi-val" id="kpi-media">—</div><div class="kpi-label">Média score</div></div>
+          <div class="kpi green"><div class="kpi-val" id="kpi-robusto">—</div><div class="kpi-label">Robustos</div></div>
+          <div class="kpi yellow"><div class="kpi-val" id="kpi-risco">—</div><div class="kpi-label">Em risco</div></div>
+          <div class="kpi red"><div class="kpi-val" id="kpi-fragil">—</div><div class="kpi-label">Frágeis</div></div>
+          <div class="kpi blue"><div class="kpi-val" id="kpi-idade">—</div><div class="kpi-label">Média idade</div></div>
+          <div class="kpi"><div class="kpi-val" id="kpi-avals">—</div><div class="kpi-label">Avaliadores</div></div>
+          <div class="kpi"><div class="kpi-val" id="kpi-hoje">—</div><div class="kpi-label">Hoje</div></div>
+        </div>
+      </div>
+
+      <!-- Charts row 1 -->
+      <div class="chart-grid">
+        <div class="chart-card"><h3>Classificação</h3><div class="chart-wrap"><canvas id="ch-class"></canvas></div></div>
+        <div class="chart-card"><h3>Gênero</h3><div class="chart-wrap"><canvas id="ch-gender"></canvas></div></div>
+        <div class="chart-card"><h3>Por avaliador</h3><div class="chart-wrap"><canvas id="ch-eval"></canvas></div></div>
+        <div class="chart-card"><h3>Distribuição de scores</h3><div class="chart-wrap"><canvas id="ch-scores"></canvas></div></div>
+        <div class="chart-card full"><h3>Avaliações ao longo do tempo</h3><div class="chart-wrap"><canvas id="ch-time"></canvas></div></div>
+        <div class="chart-card full"><h3>Distribuição por faixa etária</h3><div class="chart-wrap"><canvas id="ch-age"></canvas></div></div>
+      </div>
+
+      <!-- Domain table -->
+      <div class="dash-section">
+        <div class="dash-section-title">🏥 Média por domínio clínico</div>
+        <div class="chart-card"><table class="domain-table" id="domain-table"></table></div>
+      </div>
+
+      <!-- % alterados -->
+      <div class="dash-section">
+        <div class="dash-section-title">⚠️ % de pacientes com alteração por domínio</div>
+        <div class="chart-card full"><div class="chart-wrap" style="height:220px"><canvas id="ch-pct"></canvas></div></div>
+      </div>
+
+      <!-- Recent records -->
+      <div class="dash-section">
+        <div class="dash-section-title">📋 Avaliações recentes</div>
+        <div class="filter-row">
+          <select class="filter-select" id="f-eval" onchange="renderRecords()"><option value="">Todos os avaliadores</option></select>
+          <select class="filter-select" id="f-class" onchange="renderRecords()">
+            <option value="">Todas as classificações</option>
+            <option value="Robusto">Robusto</option>
+            <option value="Em Risco">Em Risco</option>
+            <option value="Frágil">Frágil</option>
+          </select>
+        </div>
+        <div class="chart-card" style="padding:0;overflow:auto;"><table class="records-table" id="records-table"></table></div>
+      </div>
+
+    </div><!-- /dash-content -->
+  </div><!-- /container -->
+</div><!-- /dash-page -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 // ── Acesso por e-mail + senha única ──────────────────────────────
 const SENHA_UNICA = 'ivcf20AnaBorja';
@@ -610,13 +769,24 @@ function updateBar(){
 }
 
 // ── Calculate ─────────────────────────────────────────────────────
+function calcIdade(nasc){
+  if(!nasc) return null;
+  const hoje = new Date(), dn = new Date(nasc+'T12:00:00');
+  let idade = hoje.getFullYear() - dn.getFullYear();
+  const m = hoje.getMonth() - dn.getMonth();
+  if(m < 0 || (m===0 && hoje.getDate() < dn.getDate())) idade--;
+  return idade;
+}
+
 function calculate(){
   const name  = document.getElementById('p-name').value.trim();
+  const nasc  = document.getElementById('p-nasc').value;
   const eval_ = document.getElementById('p-eval').value;
   const date  = document.getElementById('p-date').value;
   const n     = Object.keys(A).length;
 
   if(!name)   { toast('Informe o nome do paciente.','err'); return; }
+  if(!nasc)   { toast('Informe a data de nascimento.','err'); return; }
   if(!gender) { toast('Selecione o gênero.','err'); return; }
   if(!eval_)  { toast('Selecione o avaliador.','err'); return; }
   if(n<20)    { toast(`Faltam ${20-n} questão(ões).`,'err'); return; }
@@ -625,8 +795,10 @@ function calculate(){
   const cl = classify(t);
   const ds = date ? new Date(date+'T12:00:00').toLocaleDateString('pt-BR') : '—';
 
+  const idade = calcIdade(nasc);
+  const nascStr = nasc ? new Date(nasc+'T12:00:00').toLocaleDateString('pt-BR') : '—';
   document.getElementById('res-meta').innerHTML =
-    `<b>${name}</b> · ${gender==='M'?'Masculino':'Feminino'} · ${eval_} · ${ds}`;
+    `<b>${name}</b> · ${gender==='M'?'Masculino':'Feminino'} · Nasc: ${nascStr} (${idade} anos) · ${eval_} · ${ds}`;
   document.getElementById('res-score').textContent = t;
   document.getElementById('res-class').textContent = cl.label;
   document.getElementById('res-class').style.color = cl.color;
@@ -643,6 +815,7 @@ function calculate(){
     timestamp: new Date().toISOString(),
     data: date || new Date().toISOString().split('T')[0],
     paciente: name, genero: gender==='M'?'Masculino':'Feminino',
+    nascimento: nasc || '', idade: calcIdade(nasc),
     avaliador: eval_, pontuacao: t, classificacao: cl.key,
     ...Object.fromEntries(domains().map(d=>[d.label, d.score])),
     ...Object.fromEntries(Object.entries(A).map(([k,v])=>['resp_'+k, v]))
@@ -701,6 +874,7 @@ function resetForm(){
   document.querySelectorAll('.obtn').forEach(b=>b.className='obtn');
   document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('done'));
   document.getElementById('p-name').value = '';
+  document.getElementById('p-nasc').value = '';
   document.getElementById('p-eval').selectedIndex = 0;
   document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('gbtn-m').className='gbtn';
@@ -711,6 +885,239 @@ function resetForm(){
   document.getElementById('score-fill').style.width='0%';
   document.getElementById('score-class').textContent='Preencha o formulário';
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Tab navigation ───────────────────────────────────────────────
+function showTab(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='dash-page' && sessionStorage.getItem('ivcf20_dash_ok') && !dashLoaded){
+    loadDashData();
+  }
+}
+
+// ── Dashboard auth ────────────────────────────────────────────────
+const SENHA_DASH = 'ivcf20Dashboard2024'; // senha exclusiva do dashboard
+let dashLoaded   = false;
+let dashCharts   = {};
+let dashData     = [];
+
+// SUBSTITUA pelo ID da sua planilha Google Sheets
+// (parte entre /spreadsheets/d/ e /edit na URL)
+const SHEET_ID  = '1424IhnMn1_h4Vo1Iu7wNAWEyTsEfEv5-Km852CkLFXo';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+
+function dashLogin(){
+  const pass = document.getElementById('dash-pass').value;
+  const err  = document.getElementById('dash-lock-error');
+  if(pass === SENHA_DASH){
+    sessionStorage.setItem('ivcf20_dash_ok','1');
+    document.getElementById('dash-lock').style.display='none';
+    loadDashData();
+  } else {
+    err.textContent='❌ Senha incorreta.';
+    document.getElementById('dash-pass').value='';
+  }
+}
+
+// check session when tab shown
+document.addEventListener('DOMContentLoaded',()=>{
+  if(sessionStorage.getItem('ivcf20_dash_ok')){
+    document.getElementById('dash-lock').style.display='none';
+  }
+});
+
+// ── Load from Google Sheets ───────────────────────────────────────
+async function loadDashData(){
+  document.getElementById('dash-content').style.display='none';
+  document.getElementById('dash-loading').style.display='block';
+  document.getElementById('dash-error').style.display='none';
+
+  // Usa JSONP para contornar CORS do Apps Script
+  const cbName = 'ivcfCallback_' + Date.now();
+  const url = SCRIPT_URL + '?action=dados&callback=' + cbName;
+
+  const timeout = setTimeout(()=>{
+    cleanup();
+    document.getElementById('dash-loading').style.display='none';
+    const e=document.getElementById('dash-error');
+    e.style.display='block';
+    e.innerHTML='❌ Tempo esgotado ao carregar dados.<br>Verifique se o Apps Script foi reimplantado com a nova versão.';
+  }, 15000);
+
+  function cleanup(){
+    clearTimeout(timeout);
+    delete window[cbName];
+    const s=document.getElementById('jsonp-script');
+    if(s) s.remove();
+  }
+
+  window[cbName] = function(json){
+    cleanup();
+    if(json.status !== 'ok'){
+      document.getElementById('dash-loading').style.display='none';
+      const e=document.getElementById('dash-error');
+      e.style.display='block';
+      e.innerHTML='❌ Erro: ' + (json.mensagem||'Erro desconhecido');
+      return;
+    }
+    dashData   = json.dados || [];
+    dashLoaded = true;
+    renderDash();
+  };
+
+  const script = document.createElement('script');
+  script.id  = 'jsonp-script';
+  script.src = url;
+  script.onerror = ()=>{
+    cleanup();
+    document.getElementById('dash-loading').style.display='none';
+    const e=document.getElementById('dash-error');
+    e.style.display='block';
+    e.innerHTML='❌ Erro ao carregar. Verifique se o Apps Script está implantado corretamente.';
+  };
+  document.head.appendChild(script);
+}
+
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim());
+  return lines.slice(1).map(line=>{
+    const vals=[]; let cur='',inQ=false;
+    for(const ch of line){
+      if(ch==='"'){inQ=!inQ;}
+      else if(ch===','&&!inQ){vals.push(cur.trim());cur='';}
+      else cur+=ch;
+    }
+    vals.push(cur.trim());
+    const obj={};
+    headers.forEach((h,i)=>{obj[h]=(vals[i]||'').replace(/"/g,'').trim();});
+    return obj;
+  }).filter(r=>r['Paciente']&&r['Paciente'].length>0);
+}
+
+function davg(arr){return arr.length?(arr.reduce((s,v)=>s+v,0)/arr.length):0;}
+function dpct(n,t){return t?Math.round(n/t*100):0;}
+function destroyChart(id){if(dashCharts[id]){dashCharts[id].destroy();delete dashCharts[id];}}
+
+function renderDash(){
+  document.getElementById('dash-loading').style.display='none';
+  document.getElementById('dash-content').style.display='block';
+  const d=dashData, n=d.length;
+  const scores=d.map(r=>+r['Pontuação Total']).filter(v=>!isNaN(v));
+  const idades=d.map(r=>+r['Idade']).filter(v=>!isNaN(v)&&v>0);
+  const rob=d.filter(r=>r['Classificação']==='Robusto').length;
+  const ris=d.filter(r=>r['Classificação']==='Em Risco').length;
+  const fra=d.filter(r=>r['Classificação']==='Frágil').length;
+  const avals=[...new Set(d.map(r=>r['Avaliador']).filter(Boolean))];
+  const todayStr=new Date().toLocaleDateString('pt-BR');
+  const hoje=d.filter(r=>{
+    try{return r['Data Avaliação']&&new Date(r['Data Avaliação'].split('/').reverse().join('-')+'T12:00:00').toLocaleDateString('pt-BR')===todayStr;}catch{return false;}
+  }).length;
+
+  document.getElementById('kpi-total').textContent=n;
+  document.getElementById('kpi-media').textContent=scores.length?davg(scores).toFixed(1):'—';
+  document.getElementById('kpi-robusto').textContent=rob;
+  document.getElementById('kpi-risco').textContent=ris;
+  document.getElementById('kpi-fragil').textContent=fra;
+  document.getElementById('kpi-idade').textContent=idades.length?Math.round(davg(idades))+'a':'—';
+  document.getElementById('kpi-avals').textContent=avals.length;
+  document.getElementById('kpi-hoje').textContent=hoje;
+
+  // Fill evaluator filter
+  const fe=document.getElementById('f-eval');
+  fe.innerHTML='<option value="">Todos os avaliadores</option>'+avals.map(a=>`<option>${a}</option>`).join('');
+
+  // Charts
+  destroyChart('ch-class');
+  dashCharts['ch-class']=new Chart(document.getElementById('ch-class'),{type:'doughnut',
+    data:{labels:['Robusto','Em Risco','Frágil'],datasets:[{data:[rob,ris,fra],backgroundColor:['#3a7d5a','#d4a017','#b03030'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+  const masc=d.filter(r=>r['Gênero']==='Masculino').length;
+  const fem=d.filter(r=>r['Gênero']==='Feminino').length;
+  destroyChart('ch-gender');
+  dashCharts['ch-gender']=new Chart(document.getElementById('ch-gender'),{type:'doughnut',
+    data:{labels:['Masculino','Feminino'],datasets:[{data:[masc,fem],backgroundColor:['#5b8fa8','#a8688a'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+  destroyChart('ch-eval');
+  dashCharts['ch-eval']=new Chart(document.getElementById('ch-eval'),{type:'bar',
+    data:{labels:avals.map(a=>a.length>18?a.substring(0,16)+'…':a),datasets:[{data:avals.map(a=>d.filter(r=>r['Avaliador']===a).length),backgroundColor:'#5b8fa8',borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{font:{size:10}}}}}});
+
+  const bins=Array(9).fill(0);
+  scores.forEach(s=>{const i=Math.min(Math.floor(s/5),8);bins[i]++;});
+  destroyChart('ch-scores');
+  dashCharts['ch-scores']=new Chart(document.getElementById('ch-scores'),{type:'bar',
+    data:{labels:['0-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40'],datasets:[{data:bins,backgroundColor:bins.map((_,i)=>i<=1?'#3a7d5a':i<=2?'#d4a017':'#b03030'),borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{font:{size:10}}}}}});
+
+  const byDate={};
+  d.forEach(r=>{const dt=r['Data Avaliação']||'';if(dt)byDate[dt]=(byDate[dt]||0)+1;});
+  const dates=Object.keys(byDate).sort();
+  destroyChart('ch-time');
+  dashCharts['ch-time']=new Chart(document.getElementById('ch-time'),{type:'line',
+    data:{labels:dates,datasets:[{data:dates.map(dt=>byDate[dt]),borderColor:'#1a3a4a',backgroundColor:'rgba(26,58,74,0.08)',borderWidth:2,pointRadius:3,tension:.3,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{font:{size:10},maxRotation:45}}}}});
+
+  const faixas={'60-64':0,'65-69':0,'70-74':0,'75-79':0,'80-84':0,'85+':0};
+  idades.forEach(i=>{if(i<65)faixas['60-64']++;else if(i<70)faixas['65-69']++;else if(i<75)faixas['70-74']++;else if(i<80)faixas['75-79']++;else if(i<85)faixas['80-84']++;else faixas['85+']++;});
+  destroyChart('ch-age');
+  dashCharts['ch-age']=new Chart(document.getElementById('ch-age'),{type:'bar',
+    data:{labels:Object.keys(faixas),datasets:[{data:Object.values(faixas),backgroundColor:'#c06b3a',borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+
+  const domains=[
+    {label:'Idade',key:'Idade',max:3},{label:'Auto-percepção',key:'Auto-percepção',max:1},
+    {label:'AVD',key:'AVD',max:4},{label:'Cognição',key:'Cognição',max:2},
+    {label:'Humor',key:'Humor',max:2},{label:'Mobilidade',key:'Mobilidade',max:2},
+    {label:'Comunicação',key:'Comunicação',max:2},{label:'Comorbidades',key:'Comorbidades',max:4}
+  ];
+
+  // Domain table
+  const tbl=document.getElementById('domain-table');
+  tbl.innerHTML='<tr><th>Domínio</th><th>Média</th><th>Máx</th><th>% do máximo</th></tr>';
+  domains.forEach(dm=>{
+    const vals=d.map(r=>+r[dm.key]).filter(v=>!isNaN(v));
+    const med=vals.length?davg(vals):0;
+    const p=Math.round(med/dm.max*100);
+    const col=p>=60?'#b03030':p>=30?'#d4a017':'#5b8fa8';
+    tbl.innerHTML+=`<tr><td>${dm.label}</td><td><strong>${med.toFixed(2)}</strong></td><td style="color:var(--muted)">${dm.max}</td>
+      <td><div class="bar-cell"><div class="mini-bar" style="width:${Math.max(p,2)}px;background:${col}"></div><span style="font-size:12px;color:${col}">${p}%</span></div></td></tr>`;
+  });
+
+  // % alterados chart
+  const pcts=domains.map(dm=>d.length?Math.round(d.filter(r=>+r[dm.key]>0).length/d.length*100):0);
+  destroyChart('ch-pct');
+  dashCharts['ch-pct']=new Chart(document.getElementById('ch-pct'),{type:'bar',
+    data:{labels:domains.map(dm=>dm.label),datasets:[{data:pcts,backgroundColor:pcts.map(p=>p>=60?'#b03030':p>=30?'#d4a017':'#3a7d5a'),borderRadius:5,label:'% alterados'}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
+      scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}},x:{ticks:{font:{size:11}}}}}});
+
+  renderRecords();
+}
+
+function renderRecords(){
+  const fe=document.getElementById('f-eval').value;
+  const fc=document.getElementById('f-class').value;
+  const rows=dashData.filter(r=>(!fe||r['Avaliador']===fe)&&(!fc||r['Classificação']===fc)).slice(-50).reverse();
+  const tbl=document.getElementById('records-table');
+  if(!rows.length){tbl.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Nenhum registro encontrado.</td></tr>';return;}
+  const clsMap={'Robusto':'robusto','Em Risco':'risco','Frágil':'fragil'};
+  tbl.innerHTML='<tr><th>Paciente</th><th>Nasc.</th><th>Idade</th><th>Gênero</th><th>Score</th><th>Classificação</th><th>Avaliador</th></tr>'+
+    rows.map(r=>`<tr>
+      <td>${r['Paciente']||'—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${r['Data de Nascimento']||'—'}</td>
+      <td>${r['Idade']||'—'}</td>
+      <td>${r['Gênero']||'—'}</td>
+      <td><strong>${r['Pontuação Total']||'—'}</strong></td>
+      <td><span class="rbadge ${clsMap[r['Classificação']]||'risco'}">${r['Classificação']||'—'}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${r['Avaliador']||'—'}</td>
+    </tr>`).join('');
 }
 
 // ── Toast ─────────────────────────────────────────────────────────
