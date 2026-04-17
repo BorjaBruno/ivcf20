@@ -146,8 +146,8 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
     <div class="login-sub">Índice de Vulnerabilidade Clínico-Funcional</div>
     <div class="login-inst">🔒 Acesso restrito. Insira suas credenciais.</div>
     <div class="lfield">
-      <label for="l-user">Usuário</label>
-      <input id="l-user" type="text" placeholder="Digite seu usuário" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('l-pass').focus()">
+      <label for="l-user">E-mail</label>
+      <input id="l-user" type="email" placeholder="Digite seu e-mail" autocomplete="email" onkeydown="if(event.key==='Enter')document.getElementById('l-pass').focus()">
     </div>
     <div class="lfield">
       <label for="l-pass">Senha</label>
@@ -165,7 +165,7 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
 </header>
 
 <!-- Setup banner (shown when URL not configured) -->
-<div id="setup-banner" class="show">
+<div id="setup-banner">
   <strong>⚙️ Configure o banco de dados (apenas uma vez)</strong>
   <ol>
     <li>Acesse <a href="https://script.google.com" target="_blank">script.google.com</a> → <b>Novo projeto</b></li>
@@ -506,31 +506,29 @@ header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:re
 <div id="toast"></div>
 
 <script>
-// ── Usuários autorizados ─────────────────────────────────────────
-// ALTERE AQUI os usuários e senhas conforme necessário
-const USUARIOS = {
-  'estudante1': 'senha123',
-  'estudante2': 'senha456',
-  'estudante3': 'senha789',
-};
-
-// Sessão: mantém login enquanto o navegador estiver aberto
+// ── Acesso por e-mail + senha única ──────────────────────────────
+const SENHA_UNICA = 'ivcf20AnaBorja';
 const SESSION_KEY = 'ivcf20_logado';
 
 function doLogin(){
-  const user = document.getElementById('l-user').value.trim().toLowerCase();
-  const pass = document.getElementById('l-pass').value;
-  const err  = document.getElementById('login-error');
+  const email = document.getElementById('l-user').value.trim().toLowerCase();
+  const pass  = document.getElementById('l-pass').value;
+  const err   = document.getElementById('login-error');
+  const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  if(USUARIOS[user] && USUARIOS[user] === pass){
-    sessionStorage.setItem(SESSION_KEY, user);
-    document.getElementById('login-screen').style.display = 'none';
-    err.textContent = '';
-  } else {
-    err.textContent = '❌ Usuário ou senha incorretos.';
+  if(!emailValido){
+    err.textContent = '❌ Digite um e-mail válido.';
+    return;
+  }
+  if(pass !== SENHA_UNICA){
+    err.textContent = '❌ Senha incorreta.';
     document.getElementById('l-pass').value = '';
     document.getElementById('l-pass').focus();
+    return;
   }
+  sessionStorage.setItem(SESSION_KEY, email);
+  document.getElementById('login-screen').style.display = 'none';
+  err.textContent = '';
 }
 
 // Verifica sessão ao carregar
@@ -538,13 +536,12 @@ window.addEventListener('DOMContentLoaded', () => {
   if(sessionStorage.getItem(SESSION_KEY)){
     document.getElementById('login-screen').style.display = 'none';
   }
-  // Foca no campo usuário
   document.getElementById('l-user').focus();
 });
 
 // ── Config ──────────────────────────────────────────────────────
 const STORAGE_KEY = 'ivcf20_script_url';
-let SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || '';
+let SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || 'https://script.google.com/macros/s/AKfycbxMz9TofpPZMU7-nnDOFYkkEoMngRRFaYcktUpaz2323CwWW_kvp1kcil3zSNEGWFJS5A/exec';
 
 function saveURL(){
   const v = document.getElementById('url-input').value.trim();
@@ -557,8 +554,8 @@ function saveURL(){
   toast('URL salva com sucesso! ✓','ok');
 }
 
-// Hide banner if URL already saved
-if(SCRIPT_URL) document.getElementById('setup-banner').classList.remove('show');
+// URL hardcoded — hide setup banner always
+document.getElementById('setup-banner').classList.remove('show');
 
 // ── State ────────────────────────────────────────────────────────
 const A = {}; // answers
