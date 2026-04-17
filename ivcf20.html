@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVCF-20 — Índice de Vulnerabilidade Clínico-Funcional</title>
+<style>
+/* ── Variáveis ── */
+:root{
+  --bg:#f7f4ef;--card:#fff;--primary:#1a3a4a;--accent:#c06b3a;
+  --accent2:#5b8fa8;--text:#2c2c2c;--muted:#7a7a7a;--border:#e2ddd6;
+  --green:#3a7d5a;--yellow:#d4a017;--red:#b03030;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+
+/* ── Header ── */
+header{background:var(--primary);color:white;padding:24px 20px 20px;text-align:center;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-40px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(192,107,58,0.2);}
+header::after{content:'';position:absolute;bottom:-40px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(91,143,168,0.15);}
+header h1{font-size:22px;font-weight:300;letter-spacing:2px;margin-bottom:3px;position:relative;z-index:1;}
+header p{font-size:13px;opacity:.7;font-style:italic;position:relative;z-index:1;}
+header small{font-size:11px;opacity:.45;display:block;margin-top:6px;position:relative;z-index:1;}
+
+/* ── Setup Banner ── */
+#setup-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 16px;margin:16px 14px;font-size:13px;line-height:1.7;display:none;}
+#setup-banner.show{display:block;}
+#setup-banner strong{color:#856404;}
+#setup-banner code{background:#ffeaa7;padding:2px 6px;border-radius:4px;font-size:12px;word-break:break-all;}
+#setup-banner ol{margin:8px 0 0 18px;}
+#url-input{border:1.5px solid #ffc107;border-radius:6px;padding:7px 10px;font-size:13px;width:100%;margin-top:6px;outline:none;}
+#url-input:focus{border-color:var(--accent2);}
+#btn-save-url{background:var(--primary);color:white;border:none;border-radius:6px;padding:7px 16px;font-size:13px;cursor:pointer;margin-top:6px;}
+
+/* ── Container ── */
+.container{max-width:720px;margin:0 auto;padding:18px 14px;}
+
+/* ── Score Bar ── */
+.score-bar{background:var(--card);border-radius:10px;padding:13px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;position:sticky;top:8px;z-index:100;border:1px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,0.07);}
+.score-num{font-size:36px;font-weight:700;color:var(--primary);line-height:1;min-width:44px;text-align:center;}
+.score-info{flex:1;}
+.score-track{height:6px;background:#e8e4de;border-radius:99px;overflow:hidden;margin:4px 0;}
+.score-fill{height:100%;border-radius:99px;transition:width .3s,background .3s;background:var(--green);width:0%;}
+.score-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.score-class{font-size:12px;font-weight:600;color:var(--green);}
+.score-max{font-size:11px;color:var(--muted);text-align:right;}
+
+/* ── ID Card ── */
+.id-card{background:var(--card);border-radius:10px;padding:16px;margin-bottom:14px;border:1px solid var(--border);}
+.card-title{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:600;margin-bottom:10px;}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field.full{grid-column:1/-1;}
+.field label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:500;}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:9px 11px;font-size:14px;color:var(--text);background:var(--bg);outline:none;width:100%;}
+.field input:focus,.field select:focus{border-color:var(--accent2);background:white;}
+.gender-row{display:flex;gap:7px;}
+.gbtn{flex:1;border:1.5px solid var(--border);background:var(--bg);border-radius:7px;padding:9px 8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .18s;}
+.gbtn.m{border-color:#5b8fa8;background:#5b8fa8;color:white;}
+.gbtn.f{border-color:#a8688a;background:#a8688a;color:white;}
+
+/* ── Instrução ── */
+.instrucao{background:var(--card);border-left:4px solid var(--accent2);border-radius:8px;padding:11px 15px;margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.6;}
+.instrucao strong{color:var(--primary);}
+
+/* ── Domínio ── */
+.domain{margin-bottom:14px;}
+.domain-header{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.domain-icon{width:28px;height:28px;border-radius:6px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.domain-title{font-size:15px;font-weight:600;color:var(--primary);}
+.domain-max{margin-left:auto;font-size:11px;color:var(--muted);background:#ece8e0;padding:2px 7px;border-radius:99px;}
+.domain-note{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px;padding:0 2px;}
+
+/* ── Questão ── */
+.qcard{background:var(--card);border-radius:9px;padding:12px 14px;margin-bottom:8px;border:1.5px solid var(--border);transition:border-color .2s;}
+.qcard.done{border-color:var(--accent2);}
+.qnum{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+.qtext{font-size:14px;line-height:1.5;margin-bottom:9px;}
+.qnote{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:7px;}
+.qitems{list-style:none;margin:4px 0 9px 2px;font-size:12px;color:var(--muted);line-height:1.7;}
+.qitems li::before{content:"• ";color:var(--accent2);}
+.opts{display:flex;gap:7px;flex-wrap:wrap;}
+.obtn{border:2px solid var(--border);background:transparent;border-radius:7px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .18s;color:var(--text);}
+.obtn:hover{border-color:var(--accent2);color:var(--accent2);}
+.obtn.sim{border-color:var(--accent);background:var(--accent);color:white;}
+.obtn.nao{border-color:var(--accent2);background:var(--accent2);color:white;}
+.obtn.sel{border-color:var(--primary);background:var(--primary);color:white;}
+
+/* ── Botões ── */
+.btn-calc{background:var(--accent);color:white;border:none;border-radius:9px;padding:12px 32px;font-size:15px;font-weight:600;cursor:pointer;display:block;margin:20px auto 0;box-shadow:0 4px 14px rgba(192,107,58,0.3);}
+.btn-calc:hover{opacity:.9;}
+.btn-send{background:var(--green);color:white;border:none;border-radius:9px;padding:11px 24px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(58,125,90,0.3);}
+.btn-send:hover{opacity:.9;}
+.btn-send:disabled{background:#aaa;cursor:not-allowed;box-shadow:none;}
+.btn-reset{background:var(--primary);color:white;border:none;border-radius:9px;padding:11px 24px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+
+/* ── Resultado ── */
+#result-panel{display:none;background:var(--card);border-radius:12px;padding:20px 18px;margin-top:20px;border-top:5px solid var(--accent);text-align:center;}
+#result-panel h2{font-size:18px;font-weight:600;color:var(--primary);margin-bottom:4px;}
+.res-meta{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.res-score{font-size:56px;font-weight:700;color:var(--primary);line-height:1;margin:6px 0 2px;}
+.res-of{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.res-class{font-size:18px;font-weight:700;margin-bottom:6px;}
+.res-desc{font-size:13px;color:var(--muted);max-width:440px;margin:0 auto 16px;line-height:1.6;}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:12px 0;text-align:left;}
+.bitem{background:var(--bg);border-radius:7px;padding:8px 10px;border:1px solid var(--border);}
+.bitem-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:2px;}
+.bitem-score{font-size:20px;font-weight:700;}
+.legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:10px 0;font-size:12px;color:var(--muted);}
+.ldot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px;}
+
+/* ── Status ── */
+#send-status{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;min-height:18px;}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--primary);color:white;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.ok{background:var(--green);}
+#toast.err{background:var(--red);}
+
+@media(max-width:500px){.fields{grid-template-columns:1fr;}.field.full{grid-column:1;}}
+
+/* ── Login Screen ── */
+#login-screen{position:fixed;inset:0;background:var(--primary);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;}
+#login-box{background:white;border-radius:14px;padding:32px 28px;width:100%;max-width:360px;text-align:center;}
+#login-box h2{font-size:20px;font-weight:600;color:var(--primary);margin-bottom:4px;}
+.login-logo{font-size:26px;font-weight:300;letter-spacing:2px;color:var(--primary);margin-bottom:2px;}
+.login-sub{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px;}
+.login-inst{font-size:13px;color:var(--muted);margin-bottom:22px;}
+.lfield{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;text-align:left;}
+.lfield label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:500;}
+.lfield input{border:1.5px solid var(--border);border-radius:8px;padding:11px 13px;font-size:14px;outline:none;width:100%;}
+.lfield input:focus{border-color:var(--accent2);}
+#btn-login{background:var(--primary);color:white;border:none;border-radius:9px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:6px;}
+#btn-login:hover{opacity:.9;}
+#login-error{color:var(--red);font-size:13px;margin-top:10px;min-height:18px;}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="login-screen">
+  <div id="login-box">
+    <div class="login-logo">IVCF-20</div>
+    <div class="login-sub">Índice de Vulnerabilidade Clínico-Funcional</div>
+    <div class="login-inst">🔒 Acesso restrito. Insira suas credenciais.</div>
+    <div class="lfield">
+      <label for="l-user">Usuário</label>
+      <input id="l-user" type="text" placeholder="Digite seu usuário" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('l-pass').focus()">
+    </div>
+    <div class="lfield">
+      <label for="l-pass">Senha</label>
+      <input id="l-pass" type="password" placeholder="Digite sua senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button id="btn-login" onclick="doLogin()">Entrar</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<header>
+  <h1>IVCF-20</h1>
+  <p>Índice de Vulnerabilidade Clínico-Funcional</p>
+  <small>Versão do Profissional de Saúde</small>
+</header>
+
+<!-- Setup banner (shown when URL not configured) -->
+<div id="setup-banner" class="show">
+  <strong>⚙️ Configure o banco de dados (apenas uma vez)</strong>
+  <ol>
+    <li>Acesse <a href="https://script.google.com" target="_blank">script.google.com</a> → <b>Novo projeto</b></li>
+    <li>Apague o conteúdo e cole o código do arquivo <code>codigo_google_script.txt</code></li>
+    <li>Clique em <b>Implantar → Nova implantação → App da Web</b></li>
+    <li>Em "Quem tem acesso" selecione <b>Qualquer pessoa</b> → <b>Implantar</b></li>
+    <li>Copie a URL gerada e cole abaixo:</li>
+  </ol>
+  <input id="url-input" type="url" placeholder="https://script.google.com/macros/s/..." />
+  <br>
+  <button id="btn-save-url" onclick="saveURL()">💾 Salvar URL</button>
+</div>
+
+<div class="container">
+
+  <!-- ID Card -->
+  <div class="id-card">
+    <div class="card-title">📋 Identificação</div>
+    <div class="fields">
+      <div class="field full">
+        <label for="p-name">Nome completo do paciente</label>
+        <input id="p-name" type="text" placeholder="Digite o nome completo..." autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Gênero</label>
+        <div class="gender-row">
+          <button class="gbtn" id="gbtn-m" onclick="setGender('M')">♂ Masculino</button>
+          <button class="gbtn" id="gbtn-f" onclick="setGender('F')">♀ Feminino</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="p-eval">Avaliador</label>
+        <select id="p-eval">
+          <option value="">Selecione...</option>
+          <option>Estudante 1</option>
+          <option>Estudante 2</option>
+          <option>Estudante 3</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label for="p-date">Data da avaliação</label>
+        <input id="p-date" type="date">
+      </div>
+    </div>
+  </div>
+
+  <div class="instrucao">
+    <strong>Instruções:</strong> Responda às perguntas com a ajuda de familiares ou acompanhantes.
+    <em>Nos idosos incapazes de responder, utilizar as respostas do cuidador.</em>
+  </div>
+
+  <!-- Score Bar -->
+  <div class="score-bar">
+    <div>
+      <div class="score-label">Score</div>
+      <div class="score-num" id="live-score">0</div>
+    </div>
+    <div class="score-info">
+      <div class="score-label" id="progress-label">0 / 20 questões</div>
+      <div class="score-track"><div class="score-fill" id="score-fill"></div></div>
+      <div class="score-class" id="score-class">Preencha o formulário</div>
+    </div>
+    <div class="score-max">/40</div>
+  </div>
+
+  <!-- ── IDADE ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">🎂</div>
+      <div class="domain-title">Idade</div>
+      <div class="domain-max">máx. 3 pts</div>
+    </div>
+    <div class="qcard" id="c-q1">
+      <div class="qnum">Q1</div>
+      <div class="qtext">Qual é a sua idade?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q1" data-v="0" onclick="pick(this,'q1',0,'sel')">60 a 74 anos</button>
+        <button class="obtn" data-q="q1" data-v="1" onclick="pick(this,'q1',1,'sel')">75 a 84 anos</button>
+        <button class="obtn" data-q="q1" data-v="3" onclick="pick(this,'q1',3,'sel')">≥ 85 anos</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AUTO-PERCEPÇÃO ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">💊</div>
+      <div class="domain-title">Auto-Percepção da Saúde</div>
+      <div class="domain-max">máx. 1 pt</div>
+    </div>
+    <div class="qcard" id="c-q2">
+      <div class="qnum">Q2</div>
+      <div class="qtext">Em geral, comparando com outras pessoas de sua idade, você diria que sua saúde é:</div>
+      <div class="opts">
+        <button class="obtn" data-q="q2" data-v="0" onclick="pick(this,'q2',0,'nao')">Excelente, muito boa ou boa</button>
+        <button class="obtn" data-q="q2" data-v="1" onclick="pick(this,'q2',1,'sim')">Regular ou ruim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AVD ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">🏠</div>
+      <div class="domain-title">Atividades de Vida Diária</div>
+      <div class="domain-max">máx. 4 pts</div>
+    </div>
+    <div class="domain-note">Respostas positivas valem 4 pts cada. Máximo de 4 pts mesmo respondendo sim para as questões 3, 4 e 5.</div>
+    <div class="qcard" id="c-q3">
+      <div class="qnum">Q3 — AVD Instrumental</div>
+      <div class="qtext">Por causa de sua saúde ou condição física, você deixou de fazer compras?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q3" data-v="4" onclick="pick(this,'q3',4,'sim')">Sim</button>
+        <button class="obtn" data-q="q3" data-v="0" onclick="pick(this,'q3',0,'nao')">Não / Não faz por outros motivos</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q4">
+      <div class="qnum">Q4 — AVD Instrumental</div>
+      <div class="qtext">Por causa de sua saúde ou condição física, você deixou de controlar seu dinheiro, gastos domésticos ou pagar as contas de sua casa?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q4" data-v="4" onclick="pick(this,'q4',4,'sim')">Sim</button>
+        <button class="obtn" data-q="q4" data-v="0" onclick="pick(this,'q4',0,'nao')">Não / Não controla por outros motivos</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q5">
+      <div class="qnum">Q5 — AVD Instrumental</div>
+      <div class="qtext">Por causa de sua saúde ou condição física, você deixou de realizar pequenos trabalhos domésticos, como lavar louça, arrumar a casa ou fazer limpeza leve?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q5" data-v="4" onclick="pick(this,'q5',4,'sim')">Sim</button>
+        <button class="obtn" data-q="q5" data-v="0" onclick="pick(this,'q5',0,'nao')">Não / Não faz por outros motivos</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q6">
+      <div class="qnum">Q6 — AVD Básica</div>
+      <div class="qtext">Por causa de sua saúde ou condição física, você deixou de tomar banho sozinho?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q6" data-v="6" onclick="pick(this,'q6',6,'sim')">Sim</button>
+        <button class="obtn" data-q="q6" data-v="0" onclick="pick(this,'q6',0,'nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COGNIÇÃO ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">🧠</div>
+      <div class="domain-title">Cognição</div>
+      <div class="domain-max">máx. 2 pts</div>
+    </div>
+    <div class="qcard" id="c-q7">
+      <div class="qnum">Q7</div>
+      <div class="qtext">Algum familiar ou amigo falou que você está ficando esquecido?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q7" data-v="1" onclick="pick(this,'q7',1,'sim')">Sim</button>
+        <button class="obtn" data-q="q7" data-v="0" onclick="pick(this,'q7',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q8">
+      <div class="qnum">Q8</div>
+      <div class="qtext">Este esquecimento está piorando nos últimos meses?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q8" data-v="1" onclick="pick(this,'q8',1,'sim')">Sim</button>
+        <button class="obtn" data-q="q8" data-v="0" onclick="pick(this,'q8',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q9">
+      <div class="qnum">Q9</div>
+      <div class="qtext">Este esquecimento está impedindo a realização de alguma atividade do cotidiano?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q9" data-v="2" onclick="pick(this,'q9',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q9" data-v="0" onclick="pick(this,'q9',0,'nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HUMOR ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">😔</div>
+      <div class="domain-title">Humor</div>
+      <div class="domain-max">máx. 2 pts</div>
+    </div>
+    <div class="qcard" id="c-q10">
+      <div class="qnum">Q10</div>
+      <div class="qtext">No último mês, você ficou com desânimo, tristeza ou desesperança?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q10" data-v="2" onclick="pick(this,'q10',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q10" data-v="0" onclick="pick(this,'q10',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q11">
+      <div class="qnum">Q11</div>
+      <div class="qtext">No último mês, você perdeu o interesse ou prazer em atividades anteriormente prazerosas?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q11" data-v="2" onclick="pick(this,'q11',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q11" data-v="0" onclick="pick(this,'q11',0,'nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MOBILIDADE ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">🚶</div>
+      <div class="domain-title">Mobilidade</div>
+      <div class="domain-max">máx. 2 pts</div>
+    </div>
+    <div class="qcard" id="c-q12">
+      <div class="qnum">Q12 — Alcance, preensão e pinça</div>
+      <div class="qtext">Você é incapaz de elevar os braços acima do nível do ombro?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q12" data-v="1" onclick="pick(this,'q12',1,'sim')">Sim</button>
+        <button class="obtn" data-q="q12" data-v="0" onclick="pick(this,'q12',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q13">
+      <div class="qnum">Q13 — Alcance, preensão e pinça</div>
+      <div class="qtext">Você é incapaz de manusear ou segurar pequenos objetos?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q13" data-v="1" onclick="pick(this,'q13',1,'sim')">Sim</button>
+        <button class="obtn" data-q="q13" data-v="0" onclick="pick(this,'q13',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q14">
+      <div class="qnum">Q14 — Capacidade aeróbica e/ou muscular</div>
+      <div class="qtext">Você tem alguma das quatro condições abaixo?</div>
+      <ul class="qitems">
+        <li>Perda de peso não intencional ≥ 4,5 kg no último ano ou ≥ 6 kg nos últimos 6 meses ou ≥ 3 kg no último mês</li>
+        <li>IMC &lt; 22 kg/m²</li>
+        <li>Circunferência da panturrilha &lt; 31 cm</li>
+        <li>Teste de marcha (4m) &gt; 5 segundos</li>
+      </ul>
+      <div class="opts">
+        <button class="obtn" data-q="q14" data-v="2" onclick="pick(this,'q14',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q14" data-v="0" onclick="pick(this,'q14',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q15">
+      <div class="qnum">Q15 — Marcha</div>
+      <div class="qtext">Você tem dificuldade para caminhar capaz de impedir alguma atividade do cotidiano?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q15" data-v="2" onclick="pick(this,'q15',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q15" data-v="0" onclick="pick(this,'q15',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q16">
+      <div class="qnum">Q16 — Marcha</div>
+      <div class="qtext">Você teve duas ou mais quedas no último ano?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q16" data-v="2" onclick="pick(this,'q16',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q16" data-v="0" onclick="pick(this,'q16',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q17">
+      <div class="qnum">Q17 — Continência esfincteriana</div>
+      <div class="qtext">Você perde urina ou fezes, sem querer, em algum momento?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q17" data-v="2" onclick="pick(this,'q17',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q17" data-v="0" onclick="pick(this,'q17',0,'nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COMUNICAÇÃO ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">👁️</div>
+      <div class="domain-title">Comunicação</div>
+      <div class="domain-max">máx. 2 pts</div>
+    </div>
+    <div class="qcard" id="c-q18">
+      <div class="qnum">Q18 — Visão</div>
+      <div class="qnote">É permitido o uso de óculos ou lentes de contato.</div>
+      <div class="qtext">Você tem problemas de visão capazes de impedir alguma atividade do cotidiano?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q18" data-v="2" onclick="pick(this,'q18',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q18" data-v="0" onclick="pick(this,'q18',0,'nao')">Não</button>
+      </div>
+    </div>
+    <div class="qcard" id="c-q19">
+      <div class="qnum">Q19 — Audição</div>
+      <div class="qnote">É permitido o uso de aparelhos de audição.</div>
+      <div class="qtext">Você tem problemas de audição capazes de impedir alguma atividade do cotidiano?</div>
+      <div class="opts">
+        <button class="obtn" data-q="q19" data-v="2" onclick="pick(this,'q19',2,'sim')">Sim</button>
+        <button class="obtn" data-q="q19" data-v="0" onclick="pick(this,'q19',0,'nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COMORBIDADES ── -->
+  <div class="domain">
+    <div class="domain-header">
+      <div class="domain-icon">🏥</div>
+      <div class="domain-title">Comorbidades Múltiplas</div>
+      <div class="domain-max">máx. 4 pts</div>
+    </div>
+    <div class="qcard" id="c-q20">
+      <div class="qnum">Q20</div>
+      <div class="qtext">Você tem alguma das três condições abaixo?</div>
+      <ul class="qitems">
+        <li>Cinco ou mais doenças crônicas</li>
+        <li>Uso regular de cinco ou mais medicamentos diferentes todo dia</li>
+        <li>Internação recente nos últimos 6 meses</li>
+      </ul>
+      <div class="opts">
+        <button class="obtn" data-q="q20" data-v="4" onclick="pick(this,'q20',4,'sim')">Sim</button>
+        <button class="obtn" data-q="q20" data-v="0" onclick="pick(this,'q20',0,'nao')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-calc" onclick="calculate()">📊 Ver Resultado Final</button>
+
+  <!-- Resultado -->
+  <div id="result-panel">
+    <h2>Resultado da Avaliação</h2>
+    <div class="res-meta" id="res-meta"></div>
+    <div class="res-score" id="res-score"></div>
+    <div class="res-of">de 40 pontos possíveis</div>
+    <div class="res-class" id="res-class"></div>
+    <div class="res-desc" id="res-desc"></div>
+    <div class="breakdown" id="breakdown"></div>
+    <div class="legend">
+      <span><span class="ldot" style="background:#3a7d5a"></span>Robusto (0–6)</span>
+      <span><span class="ldot" style="background:#d4a017"></span>Em risco (7–14)</span>
+      <span><span class="ldot" style="background:#b03030"></span>Frágil (≥ 15)</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn-send" id="btn-send" onclick="sendData()">💾 Enviar para o Banco de Dados</button>
+      <button class="btn-reset" onclick="resetForm()">↩ Nova Avaliação</button>
+    </div>
+    <div id="send-status"></div>
+  </div>
+
+</div><!-- /container -->
+
+<div id="toast"></div>
+
+<script>
+// ── Usuários autorizados ─────────────────────────────────────────
+// ALTERE AQUI os usuários e senhas conforme necessário
+const USUARIOS = {
+  'estudante1': 'senha123',
+  'estudante2': 'senha456',
+  'estudante3': 'senha789',
+};
+
+// Sessão: mantém login enquanto o navegador estiver aberto
+const SESSION_KEY = 'ivcf20_logado';
+
+function doLogin(){
+  const user = document.getElementById('l-user').value.trim().toLowerCase();
+  const pass = document.getElementById('l-pass').value;
+  const err  = document.getElementById('login-error');
+
+  if(USUARIOS[user] && USUARIOS[user] === pass){
+    sessionStorage.setItem(SESSION_KEY, user);
+    document.getElementById('login-screen').style.display = 'none';
+    err.textContent = '';
+  } else {
+    err.textContent = '❌ Usuário ou senha incorretos.';
+    document.getElementById('l-pass').value = '';
+    document.getElementById('l-pass').focus();
+  }
+}
+
+// Verifica sessão ao carregar
+window.addEventListener('DOMContentLoaded', () => {
+  if(sessionStorage.getItem(SESSION_KEY)){
+    document.getElementById('login-screen').style.display = 'none';
+  }
+  // Foca no campo usuário
+  document.getElementById('l-user').focus();
+});
+
+// ── Config ──────────────────────────────────────────────────────
+const STORAGE_KEY = 'ivcf20_script_url';
+let SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || '';
+
+function saveURL(){
+  const v = document.getElementById('url-input').value.trim();
+  if(!v || !v.startsWith('https://script.google.com')){
+    toast('Cole uma URL válida do Google Apps Script.','err'); return;
+  }
+  SCRIPT_URL = v;
+  localStorage.setItem(STORAGE_KEY, v);
+  document.getElementById('setup-banner').classList.remove('show');
+  toast('URL salva com sucesso! ✓','ok');
+}
+
+// Hide banner if URL already saved
+if(SCRIPT_URL) document.getElementById('setup-banner').classList.remove('show');
+
+// ── State ────────────────────────────────────────────────────────
+const A = {}; // answers
+let gender = '';
+let currentResult = null;
+
+document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
+
+// ── Gender ───────────────────────────────────────────────────────
+function setGender(g){
+  gender = g;
+  document.getElementById('gbtn-m').className = 'gbtn' + (g==='M'?' m':'');
+  document.getElementById('gbtn-f').className = 'gbtn' + (g==='F'?' f':'');
+}
+
+// ── Scoring ──────────────────────────────────────────────────────
+function avd(){
+  return ((A.q3>0||A.q4>0||A.q5>0)?4:0) + (A.q6||0);
+}
+function total(){
+  return Math.min(
+    (A.q1||0)+(A.q2||0)+avd()
+    +(A.q7||0)+(A.q8||0)+(A.q9||0)
+    +(A.q10||0)+(A.q11||0)
+    +(A.q12||0)+(A.q13||0)+(A.q14||0)+(A.q15||0)+(A.q16||0)+(A.q17||0)
+    +(A.q18||0)+(A.q19||0)+(A.q20||0), 40);
+}
+function classify(s){
+  if(s<=6)  return {key:'robusto',label:'🟢 Robusto',       color:'#3a7d5a',desc:'Pontuação 0–6. Sugere ausência de fragilidade. Recomenda-se manutenção preventiva e acompanhamento de rotina.'};
+  if(s<=14) return {key:'risco',  label:'🟡 Em Risco',      color:'#d4a017',desc:'Pontuação 7–14. Sugere risco de fragilização. Recomenda-se avaliação geriátrica ampla e intervenções preventivas.'};
+  return           {key:'fragil', label:'🔴 Frágil',        color:'#b03030',desc:'Pontuação ≥ 15. Sugere fragilidade estabelecida. Recomenda-se avaliação geriátrica especializada e plano individualizado.'};
+}
+function domains(){
+  return [
+    {label:'Idade',         score:A.q1||0,                                                                 max:3},
+    {label:'Auto-percepção',score:A.q2||0,                                                                 max:1},
+    {label:'AVD',           score:avd(),                                                                   max:4},
+    {label:'Cognição',      score:(A.q7||0)+(A.q8||0)+(A.q9||0),                                         max:2},
+    {label:'Humor',         score:(A.q10||0)+(A.q11||0),                                                  max:2},
+    {label:'Mobilidade',    score:(A.q12||0)+(A.q13||0)+(A.q14||0)+(A.q15||0)+(A.q16||0)+(A.q17||0),    max:2},
+    {label:'Comunicação',   score:(A.q18||0)+(A.q19||0),                                                  max:2},
+    {label:'Comorbidades',  score:A.q20||0,                                                                max:4},
+  ];
+}
+
+// ── Pick answer ───────────────────────────────────────────────────
+function pick(btn, qId, val, cls){
+  document.querySelectorAll(`[data-q="${qId}"]`).forEach(b=>b.className='obtn');
+  btn.className = 'obtn ' + cls;
+  A[qId] = val;
+  document.getElementById('c-'+qId).classList.add('done');
+  updateBar();
+}
+
+function updateBar(){
+  const t = total();
+  const n = Object.keys(A).length;
+  document.getElementById('live-score').textContent = t;
+  document.getElementById('progress-label').textContent = n+' / 20 questões';
+  const fill = document.getElementById('score-fill');
+  const cl = classify(t);
+  fill.style.width = (t/40*100)+'%';
+  fill.style.background = cl.color;
+  const sc = document.getElementById('score-class');
+  sc.textContent = n<20 ? 'Preenchendo...' : cl.label;
+  sc.style.color = cl.color;
+}
+
+// ── Calculate ─────────────────────────────────────────────────────
+function calculate(){
+  const name  = document.getElementById('p-name').value.trim();
+  const eval_ = document.getElementById('p-eval').value;
+  const date  = document.getElementById('p-date').value;
+  const n     = Object.keys(A).length;
+
+  if(!name)   { toast('Informe o nome do paciente.','err'); return; }
+  if(!gender) { toast('Selecione o gênero.','err'); return; }
+  if(!eval_)  { toast('Selecione o avaliador.','err'); return; }
+  if(n<20)    { toast(`Faltam ${20-n} questão(ões).`,'err'); return; }
+
+  const t  = total();
+  const cl = classify(t);
+  const ds = date ? new Date(date+'T12:00:00').toLocaleDateString('pt-BR') : '—';
+
+  document.getElementById('res-meta').innerHTML =
+    `<b>${name}</b> · ${gender==='M'?'Masculino':'Feminino'} · ${eval_} · ${ds}`;
+  document.getElementById('res-score').textContent = t;
+  document.getElementById('res-class').textContent = cl.label;
+  document.getElementById('res-class').style.color = cl.color;
+  document.getElementById('res-desc').textContent  = cl.desc;
+
+  const grid = document.getElementById('breakdown');
+  grid.innerHTML = '';
+  domains().forEach(d=>{
+    const c = d.score===0?'#3a7d5a':d.score>=d.max?'#b03030':'#d4a017';
+    grid.innerHTML += `<div class="bitem"><div class="bitem-label">${d.label}</div><div class="bitem-score" style="color:${c}">${d.score}<span style="font-size:11px;color:#7a7a7a"> /${d.max}</span></div></div>`;
+  });
+
+  currentResult = {
+    timestamp: new Date().toISOString(),
+    data: date || new Date().toISOString().split('T')[0],
+    paciente: name, genero: gender==='M'?'Masculino':'Feminino',
+    avaliador: eval_, pontuacao: t, classificacao: cl.key,
+    ...Object.fromEntries(domains().map(d=>[d.label, d.score])),
+    ...Object.fromEntries(Object.entries(A).map(([k,v])=>['resp_'+k, v]))
+  };
+
+  const btn = document.getElementById('btn-send');
+  btn.disabled = false;
+  btn.textContent = '💾 Enviar para o Banco de Dados';
+  btn.style.background = '#3a7d5a';
+  document.getElementById('send-status').textContent = '';
+
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+
+// ── Send to Google Sheets ─────────────────────────────────────────
+async function sendData(){
+  if(!currentResult) return;
+  if(!SCRIPT_URL){
+    document.getElementById('setup-banner').classList.add('show');
+    document.getElementById('setup-banner').scrollIntoView({behavior:'smooth'});
+    toast('Configure a URL do banco de dados primeiro.','err');
+    return;
+  }
+  const btn = document.getElementById('btn-send');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando...';
+  document.getElementById('send-status').textContent = '';
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(currentResult)
+    });
+    btn.textContent = '✅ Enviado com sucesso!';
+    btn.style.background = '#2a6046';
+    document.getElementById('send-status').textContent =
+      'Salvo em ' + new Date().toLocaleString('pt-BR');
+    toast('Registro salvo na planilha! ✓','ok');
+    currentResult = null;
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '💾 Enviar para o Banco de Dados';
+    document.getElementById('send-status').textContent = 'Erro: ' + e.message;
+    toast('Erro ao enviar.','err');
+  }
+}
+
+// ── Reset ─────────────────────────────────────────────────────────
+function resetForm(){
+  Object.keys(A).forEach(k=>delete A[k]);
+  gender = ''; currentResult = null;
+  document.querySelectorAll('.obtn').forEach(b=>b.className='obtn');
+  document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('done'));
+  document.getElementById('p-name').value = '';
+  document.getElementById('p-eval').selectedIndex = 0;
+  document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('gbtn-m').className='gbtn';
+  document.getElementById('gbtn-f').className='gbtn';
+  document.getElementById('result-panel').style.display='none';
+  document.getElementById('live-score').textContent='0';
+  document.getElementById('progress-label').textContent='0 / 20 questões';
+  document.getElementById('score-fill').style.width='0%';
+  document.getElementById('score-class').textContent='Preencha o formulário';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Toast ─────────────────────────────────────────────────────────
+function toast(msg, type){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type?' '+type:'');
+  setTimeout(()=>t.className='', 3200);
+}
+</script>
+</body>
+</html>
